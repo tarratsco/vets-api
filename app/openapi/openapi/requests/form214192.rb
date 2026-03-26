@@ -11,7 +11,7 @@ module Openapi
             type: :object,
             required: %i[fullName dateOfBirth],
             # FE requires either ssn or vaFileNumber to be present
-            oneOf: [
+            anyOf: [
               { required: [:ssn] },
               { required: [:vaFileNumber] }
             ],
@@ -39,18 +39,19 @@ module Openapi
               typeOfWorkPerformed: { type: :string, maxLength: 1000 },
               beginningDateOfEmployment: { type: :string, format: :date },
               endingDateOfEmployment: { type: :string, format: :date },
-              amountEarnedLast12MonthsOfEmployment: { type: :number, pattern: '^\\d*(\\.\\d{1,2})?$', min: 0,
-                                                      max: 999_999_999 },
+              amountEarnedLast12MonthsOfEmployment: { type: :number, minimum: 0,
+                                                      maximum: 999999999 },
               timeLostLast12MonthsOfEmployment: { type: :string, maxLength: 100 },
-              hoursWorkedDaily: { type: :number, pattern: '^\\d*$' },
-              hoursWorkedWeekly: { type: :number, pattern: '^\\d*$' },
+              hoursWorkedDaily: { type: :number, minimum: 0 },
+              hoursWorkedWeekly: { type: :number, minimum: 0 },
               concessions: { type: :string, maxLength: 1000 },
               terminationReason: { type: :string, maxLength: 1000 },
               dateLastWorked: { type: :string, format: :date },
               lastPaymentDate: { type: :string, format: :date },
-              lastPaymentGrossAmount: { type: :number, pattern: '^\\d*(\\.\\d{1,2})?$', min: 0, max: 999_999_999 },
+              lastPaymentGrossAmount: { type: :number, minimum: 0, maximum: 999999999 },
               lumpSumPaymentMade: { type: :boolean },
-              grossAmountPaid: { type: :number, pattern: '^\\d*(\\.\\d{1,2})?$' },
+              grossAmountPaid: { type: :number, minimum: 0, maximum: 999999999 },
+              datePaid: { type: :string, format: :date }
             }
           },
           militaryDutyStatus: {
@@ -66,7 +67,7 @@ module Openapi
                         properties: {
               sickRetirementOtherBenefits: { type: :boolean },
               typeOfBenefit: { type: :string, maxLength: 500 },
-              grossMonthlyAmountOfBenefit: { type: :number, min: 0, max: 999_999_999, pattern: '^\\d*(\\.\\d{1,2})?$' },
+              grossMonthlyAmountOfBenefit: { type: :number, minimum: 0, maximum: 999999999 },
               dateBenefitBegan: { type: :string, format: :date },
               dateFirstPaymentIssued: { type: :string, format: :date },
               dateBenefitWillStop: { type: :string, format: :date },
