@@ -92,7 +92,7 @@ module Openapi
             }
           }
         },
-        required: %i[veteranInformation employmentInformation militaryDutyStatus certification]
+        required: %i[veteranInformation employmentInformation certification]
       }.freeze
     end
   end
