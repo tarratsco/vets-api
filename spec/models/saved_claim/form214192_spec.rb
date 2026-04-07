@@ -171,10 +171,9 @@ RSpec.describe SavedClaim::Form214192, type: :model do
       end
 
       context 'militaryDutyStatus validation' do
-        it 'requires militaryDutyStatus at top level' do
+        it 'accepts form without militaryDutyStatus (optional at top level)' do
           form.delete('militaryDutyStatus')
-          expect(claim).not_to be_valid
-          expect(claim.errors.full_messages.join).to include('missing required properties')
+          expect(claim).to be_valid
         end
 
         it 'requires currentDutyStatus within militaryDutyStatus' do
