@@ -1521,7 +1521,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_07_160933) do
     t.datetime "updated_at", null: false
     t.index ["organization_poa", "representative_id"], name: "idx_org_reps_on_org_poa_and_rep_id", unique: true
     t.index ["representative_id"], name: "index_organization_representatives_on_representative_id"
-    t.check_constraint "acceptance_mode::text = ANY (ARRAY['any_request'::character varying::text, 'self_only'::character varying::text, 'no_acceptance'::character varying::text])", name: "org_reps_acceptance_mode_check"
+    t.check_constraint "acceptance_mode::text = ANY (ARRAY['any_request'::character varying, 'self_only'::character varying, 'no_acceptance'::character varying]::text[])", name: "org_reps_acceptance_mode_check"
   end
 
   create_table "persistent_attachments", id: :serial, force: :cascade do |t|
@@ -1585,6 +1585,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_07_160933) do
     t.index ["tracking_number"], name: "index_preneed_submissions_on_tracking_number", unique: true
   end
 
+  create_table "representation_management_accreditation_totals", force: :cascade do |t|
+    t.integer "attorneys"
+    t.integer "claims_agents"
+    t.integer "vso_representatives"
+    t.integer "vso_organizations"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "idx_on_created_at_5b6fb39541"
+  end
+
   create_table "remediation_batch_upload_items", force: :cascade do |t|
     t.string "submission_id", null: false
     t.string "s3_bucket", null: false
@@ -1607,17 +1617,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_07_160933) do
     t.index ["status", "started_at"], name: "index_remediation_batch_upload_items_on_status_and_started_at"
     t.index ["submission_id"], name: "index_remediation_batch_upload_items_on_submission_id", unique: true
     t.check_constraint "retry_count >= 0 AND retry_count <= 3", name: "chk_retry_count"
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying::text, 'downloading'::character varying::text, 'uploading'::character varying::text, 'completed'::character varying::text, 'failed'::character varying::text])", name: "chk_status"
-  end
-
-  create_table "representation_management_accreditation_totals", force: :cascade do |t|
-    t.integer "attorneys"
-    t.integer "claims_agents"
-    t.integer "vso_representatives"
-    t.integer "vso_organizations"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_at"], name: "idx_on_created_at_5b6fb39541"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'downloading'::character varying, 'uploading'::character varying, 'completed'::character varying, 'failed'::character varying]::text[])", name: "chk_status"
   end
 
   create_table "saved_claim_groups", force: :cascade do |t|
