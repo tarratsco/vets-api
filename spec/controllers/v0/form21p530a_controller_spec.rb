@@ -578,6 +578,15 @@ RSpec.describe V0::Form21p530aController, type: :controller do
         get(:download_pdf_by_guid, params: { guid: claim.guid })
       end
 
+      it 'tracks PDF generation failure with claim_guid' do
+        allow_any_instance_of(SavedClaim::Form21p530a).to receive(:to_pdf).and_raise(StandardError, 'PDF error')
+        expect(monitor).to receive(:track_pdf_generation_failure)
+          .with(kind_of(StandardError), hash_including(user_uuid: user.uuid, claim_guid: claim.guid))
+
+        get(:download_pdf_by_guid, params: { guid: claim.guid })
+        expect(response).to have_http_status(:internal_server_error)
+      end
+
       context 'when feature flag is disabled' do
         before do
           allow(Flipper).to receive(:enabled?).with(:form_530a_enabled, anything).and_return(false)

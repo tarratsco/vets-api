@@ -340,7 +340,7 @@
       "cwe_id": [
         22
       ],
-      "note": "to_pdf is a method, not a model attribute and uses SecureRandom.uuid"
+      "note": "to_pdf is a method call that returns a server-generated temp file path; this is a Brakeman false positive for model-attribute filename usage."
     },
     {
       "warning_type": "File Access",
@@ -363,7 +363,7 @@
       "cwe_id": [
         22
       ],
-      "note": "to_pdf is a method, not a model attribute and uses SecureRandom.uuid"
+      "note": "to_pdf is a method call that returns a server-generated temp file path; this is a Brakeman false positive for model-attribute filename usage."
     },
     {
       "warning_type": "Cross-Site Scripting",

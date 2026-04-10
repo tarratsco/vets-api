@@ -642,7 +642,7 @@
           "benefits_forms"
         ],
         "operationId": "submitForm21p530a",
-        "description": "Submit a Form 21P-530a (Application for Burial Allowance - State/Tribal Organizations). This endpoint requires authentication.",
+        "description": "Submit a Form 21P-530a (Application for Burial Allowance - State/Tribal Organizations). Authentication may be required depending on current feature flag configuration.",
         "parameters": [],
         "responses": {
           "200": {

@@ -66,7 +66,7 @@ module V0
       monitor.track_pdf_generation_failure(e, user_uuid: current_user&.uuid, claim_guid:)
       raise Common::Exceptions::RecordNotFound, claim_guid
     rescue => e
-      handle_pdf_generation_error(e)
+      handle_pdf_generation_error(e, { 'claimGuid' => claim_guid })
     ensure
       File.delete(source_file_path) if source_file_path && File.exist?(source_file_path)
     end

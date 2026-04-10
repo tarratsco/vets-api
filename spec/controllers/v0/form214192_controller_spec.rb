@@ -458,6 +458,12 @@ RSpec.describe V0::Form214192Controller, type: :controller do
           payload
         end
 
+        let(:claim) do
+          claim = SavedClaim::Form214192.new(form: payload_with_max_street2.to_json)
+          claim.save!(validate: false)
+          claim
+        end
+
         it 'accepts street2 with exactly 30 characters' do
           get(:download_pdf_by_guid, params: { guid: claim.guid })
 
