@@ -47,7 +47,8 @@ module V0
     # GET /v0/form214192/download_pdf/:guid - Download PDF from saved claim by GUID
     def download_pdf_by_guid
       pdf_start_time = Time.current
-      claim = SavedClaim::Form214192.find_by!(guid: params[:guid])
+      claim_guid = params[:guid]
+      claim = SavedClaim::Form214192.find_by!(guid: claim_guid)
       source_file_path = claim.to_pdf
 
       monitor.track_pdf_generation_success(pdf_start_time, user_uuid: current_user&.uuid, claim_guid: claim.guid)
@@ -56,10 +57,10 @@ module V0
       client_file_name = "21-4192_#{claim.veteran_name.gsub(' ', '_')}.pdf"
       send_data file_contents, filename: client_file_name, type: 'application/pdf', disposition: 'attachment'
     rescue ActiveRecord::RecordNotFound => e
-      monitor.track_pdf_generation_failure(e, user_uuid: current_user&.uuid, claim_guid: params[:guid])
-      raise Common::Exceptions::RecordNotFound, params[:guid]
+      monitor.track_pdf_generation_failure(e, user_uuid: current_user&.uuid, claim_guid:)
+      raise Common::Exceptions::RecordNotFound, claim_guid
     rescue => e
-      handle_pdf_generation_error(e, user_uuid: current_user&.uuid, claim_guid: params[:guid])
+      handle_pdf_generation_error(e, user_uuid: current_user&.uuid, claim_guid:)
     ensure
       File.delete(source_file_path) if source_file_path && File.exist?(source_file_path)
     end
